@@ -55,6 +55,7 @@ class _CropAdditionPageState extends State<CropAdditionPage> {
       }),
     );
     if (res.statusCode == 200 || res.statusCode == 201) {
+      print(res.body);
       Navigator.of(context).pop();
       Navigator.of(context).pop(true);
       ScaffoldMessenger.of(context).showSnackBar(

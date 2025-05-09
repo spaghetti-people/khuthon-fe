@@ -46,6 +46,7 @@ dependencies:
   permission_handler: ^11.3.1
   dio_cookie_manager: ^2.0.0
   cookie_jar: ^3.0.1
+  video_player: ^2.5.1
 
 dev_dependencies:
   flutter_test:
@@ -66,7 +67,8 @@ flutter:
   assets:
     - assets/
     - assets/images/
-
+    - assets/images/cam.mp4
+    - assets/images/cam1.mp4
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

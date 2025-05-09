@@ -11,17 +11,23 @@ class UserCrop {
   final int cropId;
   final String nickName;
   final int liveDay;
+  final String cropName;
+  final int isEnd;
 
   UserCrop({
     required this.cropId,
     required this.nickName,
     required this.liveDay,
+    required this.cropName,
+    required this.isEnd,
   });
 
   factory UserCrop.fromJson(Map<String, dynamic> json) => UserCrop(
         cropId: json['crop_id'],
         nickName: json['nick_name'],
         liveDay: json['live_day'],
+      cropName: json['crop_name'],
+      isEnd: json['is_end'],
       );
 }
 
@@ -53,7 +59,7 @@ class _DashboardPageState extends State<DashboardPage> {
     });
 
     if (res.statusCode == 200) {
-      // print(res.body);
+      print(res.body);
       final body = jsonDecode(res.body) as Map<String, dynamic>;
       final raw = body['res'];
       final list = raw is List ? raw : <dynamic>[];
@@ -123,7 +129,13 @@ class _DashboardPageState extends State<DashboardPage> {
                 Navigator.pushNamed(
                   context,
                   '/plant',
-                  arguments: {'title': crop.nickName},
+                  arguments: {
+                    'cropId': crop.cropId,
+                    'nickName': crop.nickName,
+                    'liveDay': crop.liveDay,
+                    'cropName': crop.cropName,
+                    'isEnd': crop.isEnd
+                  },
                 );
               },
               child: Container(
