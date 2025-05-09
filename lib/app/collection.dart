@@ -1,5 +1,3 @@
-// lib/pages/dashboard_page.dart
-
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -11,28 +9,31 @@ class UserCrop {
   final int cropId;
   final String nickName;
   final int liveDay;
+  final int isEnd;
 
   UserCrop({
     required this.cropId,
     required this.nickName,
     required this.liveDay,
+    required this.isEnd
   });
 
   factory UserCrop.fromJson(Map<String, dynamic> json) => UserCrop(
-        cropId: json['crop_id'],
-        nickName: json['nick_name'],
-        liveDay: json['live_day'],
-      );
+    cropId: json['crop_id'],
+    nickName: json['nick_name'],
+    liveDay: json['live_day'],
+    isEnd: json['is_end']
+  );
 }
 
-class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+class CollectionPage extends StatefulWidget {
+  const CollectionPage({Key? key}) : super(key: key);
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  State<CollectionPage> createState() => _CollectionPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _CollectionPageState extends State<CollectionPage> {
   late Future<List<UserCrop>> _futureCrops;
 
   @override
@@ -46,14 +47,14 @@ class _DashboardPageState extends State<DashboardPage> {
     final box = Hive.box('localdata');
     final session = box.get('session') as String?;
 
-    final uri = Uri.parse('http://localhost:8000/user/crop?mode=0');
+    final uri = Uri.parse('http://localhost:8000/user/crop?mode=1');
     final res = await http.get(uri, headers: {
       'Content-Type': 'application/json',
       if (session != null) 'Authorization': session,
     });
 
     if (res.statusCode == 200) {
-      // print(res.body);
+      print(res.body);
       final body = jsonDecode(res.body) as Map<String, dynamic>;
       final raw = body['res'];
       final list = raw is List ? raw : <dynamic>[];
@@ -74,49 +75,41 @@ class _DashboardPageState extends State<DashboardPage> {
         if (snap.hasError) {
           return Center(child: Text('오류: ${snap.error}'));
         }
-        final crops = snap.data!;
-        final itemCount = crops.length + 1;
 
+        final crops = snap.data!;
+
+        if (crops.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  'assets/images/sad_face.png',
+                  width: 100,
+                  height: 100,
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  '아직 수확을 완료한 작물이 없어요.',
+                  style: TextStyle(fontSize: 20, color: Color(0xFF6B7280)),
+                ),
+              ],
+            ),
+          );
+        }
+
+
+        // ② 데이터가 있으면 기존 GridView
         return GridView.builder(
           padding: const EdgeInsets.all(16),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
+            crossAxisCount: 4,
             mainAxisSpacing: 12,
             crossAxisSpacing: 12,
             childAspectRatio: 1,
           ),
-          itemCount: itemCount,
+          itemCount: crops.length,
           itemBuilder: (ctx, idx) {
-            if (idx == crops.length) {
-              // 마지막: 작물 추가하기 타일
-              return GestureDetector(
-                onTap: () async {
-                  await Navigator.pushNamed(context, '/crop_add');
-                  setState(() {
-                    _futureCrops = _fetchUserCrops();
-                  });
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Color(0x126B7280),
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: Color(0xff6B7280)),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.add, size: 36, color: Color(0xff6B7280)),
-                      SizedBox(height: 20),
-                      Text(
-                        '추가하기',
-                        style: TextStyle(color: Color(0xff6B7280)),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }
-
             final crop = crops[idx];
             return GestureDetector(
               onTap: () {
@@ -137,13 +130,15 @@ class _DashboardPageState extends State<DashboardPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset('assets/images/plant.png', height: 60),
-                    const SizedBox(height: 20),
+                    Image.asset('assets/images/plant.png', height: 48),
+                    const SizedBox(height: 8),
                     Text(
                       crop.nickName,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w600),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
