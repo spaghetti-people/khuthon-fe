@@ -55,7 +55,10 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       mydata = mybox.keys.map((e) {
         var res = mybox.get(e);
-        return {'key': e, 'title': res['title']};
+        return {
+          'key': e,
+          'title': res['title'].toString(),
+        };
       }).toList();
     });
   }
@@ -82,7 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       backgroundColor: Theme.of(context).canvasColor,
       body: SingleChildScrollView(
-        // Scrollable하게 만들기
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
