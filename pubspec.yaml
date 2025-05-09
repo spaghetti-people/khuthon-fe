@@ -70,6 +70,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   fonts:
+    - family: kangwon
+      fonts:
+        - asset: assets/fonts/kangwon.ttf
+          weight: 900
     - family: Pretendard
       fonts:
         - asset: assets/fonts/Pretendard-Thin.ttf
