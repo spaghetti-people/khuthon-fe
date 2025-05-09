@@ -64,7 +64,7 @@ class LoginScreen extends ConsumerWidget {
                 child: SizedBox(
                   height: 56,  // 높이 고정
                   child: ElevatedButton(
-                    onPressed: () { /* ... */ },
+                    onPressed: () { Navigator.pushNamed(context, '/signup');},
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFCBD5E1),
                       elevation: 0,

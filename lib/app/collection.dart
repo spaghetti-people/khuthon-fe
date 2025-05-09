@@ -11,22 +11,27 @@ class UserCrop {
   final int liveDay;
   final String cropName;
   final int isEnd;
+  final double evaluationRate;
+  final String evaluation;
 
-  UserCrop({
-    required this.cropId,
-    required this.nickName,
-    required this.liveDay,
-    required this.cropName,
-    required this.isEnd,
-  });
+  UserCrop(
+      {required this.cropId,
+      required this.nickName,
+      required this.liveDay,
+      required this.cropName,
+      required this.isEnd,
+      required this.evaluationRate,
+      required this.evaluation});
 
   factory UserCrop.fromJson(Map<String, dynamic> json) => UserCrop(
-    cropId: json['crop_id'],
-    nickName: json['nick_name'],
-    liveDay: json['live_day'],
-    cropName: json['crop_name'],
-    isEnd: json['is_end'],
-  );
+      cropId: json['crop_id'],
+      nickName: json['nick_name'],
+      liveDay: json['live_day'],
+      cropName: json['crop_name'],
+      isEnd: json['is_end'],
+      evaluationRate: json['evaluation_rate'],
+      evaluation: json['evaluation']);
+
 }
 
 class CollectionPage extends StatefulWidget {
@@ -101,7 +106,6 @@ class _CollectionPageState extends State<CollectionPage> {
           );
         }
 
-
         // ② 데이터가 있으면 기존 GridView
         return GridView.builder(
           padding: const EdgeInsets.all(16),
@@ -124,7 +128,9 @@ class _CollectionPageState extends State<CollectionPage> {
                     'nickName': crop.nickName,
                     'liveDay': crop.liveDay,
                     'cropName': crop.cropName,
-                    'isEnd': crop.isEnd
+                    'isEnd': crop.isEnd,
+                    'evaluationRate': crop.evaluationRate,
+                    'evaluation': crop.evaluation
                   },
                 );
               },

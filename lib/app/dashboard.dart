@@ -13,22 +13,26 @@ class UserCrop {
   final int liveDay;
   final String cropName;
   final int isEnd;
+  final double evaluationRate;
+  final String evaluation;
 
-  UserCrop({
-    required this.cropId,
-    required this.nickName,
-    required this.liveDay,
-    required this.cropName,
-    required this.isEnd,
-  });
+  UserCrop(
+      {required this.cropId,
+      required this.nickName,
+      required this.liveDay,
+      required this.cropName,
+      required this.isEnd,
+      required this.evaluationRate,
+      required this.evaluation});
 
   factory UserCrop.fromJson(Map<String, dynamic> json) => UserCrop(
-        cropId: json['crop_id'],
-        nickName: json['nick_name'],
-        liveDay: json['live_day'],
+      cropId: json['crop_id'],
+      nickName: json['nick_name'],
+      liveDay: json['live_day'],
       cropName: json['crop_name'],
       isEnd: json['is_end'],
-      );
+      evaluationRate: json['evaluation_rate'],
+      evaluation: json['evaluation']);
 }
 
 class DashboardPage extends StatefulWidget {
@@ -134,7 +138,9 @@ class _DashboardPageState extends State<DashboardPage> {
                     'nickName': crop.nickName,
                     'liveDay': crop.liveDay,
                     'cropName': crop.cropName,
-                    'isEnd': crop.isEnd
+                    'isEnd': crop.isEnd,
+                    'evaluationRate': crop.evaluationRate,
+                    'evaluation': crop.evaluation
                   },
                 );
               },
@@ -155,7 +161,14 @@ class _DashboardPageState extends State<DashboardPage> {
                       crop.nickName,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.w600),
+                          fontSize: 20, fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(height: 5,),
+                    Text(
+                      crop.cropName,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),

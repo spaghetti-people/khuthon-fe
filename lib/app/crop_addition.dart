@@ -132,7 +132,7 @@ class _CropAdditionPageState extends State<CropAdditionPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset('assets/images/plant.png', height: 48),
+                      Image.asset('assets/images/seed.png', height: 48),
                       const SizedBox(height: 8),
                       Text(crop.name,
                           style: TextStyle(color: selected ? Colors.purple : Colors.black)),
