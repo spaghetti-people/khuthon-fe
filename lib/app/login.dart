@@ -26,7 +26,7 @@ class LoginScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 12),
                 const Text(
-                  '워드타입 계정으로 로그인하세요',
+                  '플랜티파이 계정으로 로그인하세요',
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.black54,
@@ -47,82 +47,74 @@ class LoginScreen extends ConsumerWidget {
                   obscure: true,
                 ),
 
-                const Spacer(flex: 2),
-
-                // ③ 하단 버튼
-                Row(
-                  children: [
-                    // 회원가입
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/signup');
-                        },
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          side: BorderSide(color: Colors.black26),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                        ),
-                        child: const Text(
-                          '회원가입',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black87,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    // 로그인
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          final success = await AuthService.login(
-                            idController.text.trim(),
-                            pwController.text.trim(),
-                          );
-                          if (success) {
-                            Navigator.pushReplacementNamed(context, '/home');
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('로그인에 실패했습니다')),
-                            );
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF3B3BDD),
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                        ),
-                        child: const Text(
-                          '로그인',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 24),
+                const Spacer(flex: 3),
               ],
             ),
           ),
         ),
       ),
+
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+          child: Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 56,  // 높이 고정
+                  child: ElevatedButton(
+                    onPressed: () { /* ... */ },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFFCBD5E1),
+                      elevation: 0,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: const Text('회원가입', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: SizedBox(
+                  height: 56,  // 높이 고정
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      final success = await AuthService.login(
+                        idController.text.trim(),
+                        pwController.text.trim(),
+                      );
+                      if (success) {
+                        Navigator.pushReplacementNamed(context, '/home');
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('로그인에 실패했습니다')),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF4341A6),
+                      elevation: 0,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: const Text('로그인', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+
     );
   }
 
-  /// 흰 배경, 둥근 모서리, 패딩이 있는 입력창 빌더
   Widget _buildInputField({
     required TextEditingController controller,
     required String hint,
