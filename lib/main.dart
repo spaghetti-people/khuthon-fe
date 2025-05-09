@@ -34,10 +34,12 @@ class _MyAppState extends ConsumerState<MyApp> {
   Future<void> _loadStatus() async {
     final box = Hive.box('localdata');
 
+    // 세션 정보
     final session = box.get('session') as String?;
     final hasSession = session != null && session.isNotEmpty;
 
-    final seen = box.get('seenOnboarding') as bool? ?? false;
+    // 온보딩 본 여부
+    final seen = box.get('isFirst') as bool? ?? true;
 
     setState(() {
       _hasSession = hasSession;
@@ -47,33 +49,31 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // 1) 아직 로딩 중
+    // 아직 로딩 중
     if (_hasSession == null || _seenOnboarding == null) {
       return const MaterialApp(
         home: Scaffold(body: Center(child: CircularProgressIndicator())),
       );
     }
 
-    // 2) 온보딩을 안 봤으면 -> OnboardingScreen
-    if (_seenOnboarding == false) {
+    // 온보딩을 안 봤으면
+    if (_seenOnboarding == true) {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         routes: routes,
         theme: _buildTheme(),
         home: OnboardingScreen(
-          onFinish: () async {
+          onFinish: () {
+            // 여기서는 단순히 상태만 변경
             final box = Hive.box('localdata');
-            await box.put('seenOnboarding', true);
-            // 온보딩 본 상태로 바꿔서 rebuild 유도
-            setState(() => _seenOnboarding = true);
-            // 그리고 로그인 페이지로 이동
-            Navigator.pushReplacementNamed(context, '/login');
+            box.put('isFirst', false);
+            setState(() => _seenOnboarding = false);
           },
         ),
       );
     }
 
-    // 3) 온보딩 본 뒤에는 기존 세션 체크
+    // 온보딩 본 뒤에는 기존 세션 체크
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: routes,
@@ -105,11 +105,8 @@ class _MyAppState extends ConsumerState<MyApp> {
         foregroundColor: Color(0xFF2C2C2C),
         actionsIconTheme: IconThemeData(color: Color(0xFF2C2C2C)),
         iconTheme: IconThemeData(color: Color(0xFF2C2C2C)),
-        titleTextStyle: TextStyle(
-          color: Color(0xFF2C2C2C),
-          fontSize: 16,
-          fontWeight: FontWeight.w700,
-        ),
+        titleTextStyle:
+        TextStyle(color: Color(0xFF2C2C2C), fontSize: 16, fontWeight: FontWeight.w700),
       ),
       listTileTheme: const ListTileThemeData(
         iconColor: Color(0xFF2C2C2C),

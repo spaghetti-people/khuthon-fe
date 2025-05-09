@@ -2,14 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 class OnboardingScreen extends StatelessWidget {
-  // ① 콜백 프로퍼티 추가
   final VoidCallback onFinish;
-
-  // ② 생성자에 required로 받기
-  const OnboardingScreen({
-    super.key,
-    required this.onFinish,
-  });
+  const OnboardingScreen({super.key, required this.onFinish});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +20,7 @@ class OnboardingScreen extends StatelessWidget {
                 fontSize: 18,
                 fontFamily: 'kangwon',
                 fontWeight: FontWeight.w900,
-                color: Colors.black, // 필요에 따라 변경
+                color: Colors.black,
               ),
             ),
             const SizedBox(width: 6),
@@ -37,7 +31,7 @@ class OnboardingScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(6),
               ),
               child: const Text(
-                'Plus',
+                'PLUS',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w800,
@@ -54,71 +48,55 @@ class OnboardingScreen extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 40),
-
-              // 이미지
               Expanded(
                 child: Center(
                   child: Image.asset(
-                    'assets/images/onboarding_girl.png', // 이미지 파일 넣으신 경로에 맞게 수정하세요
+                    'assets/images/onboarding_girl.png',
                     height: 300,
                   ),
                 ),
               ),
-
               const SizedBox(height: 20),
-
-              // 제목
               const Text(
                 '손 안에서 키우는 나만의 채소',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.black,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: Colors.black),
               ),
-
               const SizedBox(height: 12),
-
-              // 설명
               const Text(
                 '당신의 꾸준함이 자라는 시간,\n플랜티파이에서 채소를 키워보세요.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF60646C),
-                ),
+                style: TextStyle(fontSize: 14, color: Color(0xFF60646C)),
               ),
-
-              const SizedBox(height: 32),
-
-              // 버튼
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    final box = Hive.box('localdata');
-                    await box.put('isFirst', false);                // 온보딩 본 상태 저장
-                    Navigator.pushReplacementNamed(context, '/login');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF3B3BDD),
-                    elevation: 0,
-                    shadowColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child: const Text(
-                    '플랜티파이 시작하기',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-
-
-              const SizedBox(height: 18),
+              const SizedBox(height: 50),
             ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          child: SizedBox(
+            height: 56,
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                onFinish();
+                Navigator.pushReplacementNamed(context, '/login');
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF4341A6),
+                elevation: 0,
+                shadowColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              child: const Text(
+                '플랜티파이 시작하기',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
           ),
         ),
       ),
